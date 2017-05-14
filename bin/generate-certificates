@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require 'digest/md5'
+require 'shellwords'
+require_relative '../certificate'
+
+participant_name = 'Petar Petrov'
+participant_email = 'petar@example.com'
+
+result = Certificate.generate_for(
+  participant_name: participant_name,
+  participant_email: participant_email,
+  event_slug: 'rgs-test',
+  event_name: 'Rails Girls Sofia 8.0',
+  event_date: '12-13 May 2017',
+  event_location: 'Sofia, Bulgaria',
+  target_path: Dir.pwd,
+)
+
+if result
+  puts "Generated cert for #{participant_name} <#{participant_email}> at #{result}"
+else
+  STDERR.puts "FAILED to generate cert for #{participant_name} <#{participant_email}>"
+  exit 1
+end

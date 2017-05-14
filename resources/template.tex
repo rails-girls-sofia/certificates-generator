@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{mathpazo}
+\renewcommand{\familydefault}{\rmdefault}
+\usepackage[landscape,a4paper]{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=1cm,lmargin=3cm,rmargin=3cm}
+\usepackage{fancybox}
+\usepackage{calc}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{eso-pic}
+\usepackage{color}
+\usepackage[export]{adjustbox}
+\usepackage{wrapfig}
+
+\pagenumbering{gobble}
+
+\definecolor{maintextcolor}{RGB}{226, 13, 21}
+
+\newcommand\BackgroundPic{%
+\put(0,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth,height=\paperheight,%
+keepaspectratio]{images/certificate-background.jpg}%
+\vfill
+}}}
+
+\begin{document}
+\AddToShipoutPicture{\BackgroundPic}
+
+\begin{center}
+\vspace{2.3cm}
+\fontsize{1.3cm}{1.3cm}{\textmd{CERTIFICATE OF ATTENDANCE}}
+
+\vspace{0.4cm}
+
+\Large{This certificate is awarded to}
+
+\vspace{1.3cm}
+
+\fontsize{1.5cm}{1.6cm}{\textbf{<CERTIFICATE_HOLDER_NAME>}}
+
+\vspace{1.3cm}
+
+\Large{for attending the web programming workshop for beginners}
+
+\vspace{0.4cm}
+
+\fontsize{1.4cm}{1.6cm}{\textbf{\textcolor{maintextcolor}{<EVENT_NAME>}}}
+
+\vspace{0.4cm}
+
+\Large{held on <EVENT_DATE> in <EVENT_LOCATION>.}
+
+\vspace{0.4cm}
+
+\includegraphics[height=4cm]{images/ruby-girl-stamp.png}
+
+\footnotesize{\textcolor{gray}{
+This certificate is issued by the Rails Girls Sofia organization team.\\
+Contact us at railsgirlssofia@gmail.com or visit railsgirls.com/sofia
+}}
+\end{center}
+
+\end{document}
