@@ -4,14 +4,14 @@ module Certificate
   def generate_for(
     participant_name:,
     participant_email:,
-    event_slug:,
+    certificate_slug:,
     event_name:,
     event_date:,
     event_location:,
     target_path:
   )
-    resources_path = File.dirname(__FILE__) + '/resources'
-    certificate_slug = "#{event_slug}-certificate-#{Digest::MD5.hexdigest(participant_email)}"
+    target_path      = File.realpath(target_path)
+    resources_path   = File.dirname(__FILE__) + '/resources'
 
     generic_template_path      = "#{resources_path}/template.tex"
     personalized_template_path = "#{resources_path}/#{certificate_slug}.tex"

@@ -3,23 +3,56 @@
 require 'digest/md5'
 require 'shellwords'
 require_relative '../certificate'
+require_relative '../transliterate'
 
-participant_name = 'Petar Petrov'
-participant_email = 'petar@example.com'
+if ARGV.size != 6
+  STDERR.puts <<~USAGE
+    Usage: #{__FILE__} event_slug event_name event_date event_location path/to/participants.tsv certificates_target_path
 
-result = Certificate.generate_for(
-  participant_name: participant_name,
-  participant_email: participant_email,
-  event_slug: 'rgs-test',
-  event_name: 'Rails Girls Sofia 8.0',
-  event_date: '12-13 May 2017',
-  event_location: 'Sofia, Bulgaria',
-  target_path: Dir.pwd,
-)
+    The participants.tsv file should contain entries in the following format:
 
-if result
-  puts "Generated cert for #{participant_name} <#{participant_email}> at #{result}"
-else
-  STDERR.puts "FAILED to generate cert for #{participant_name} <#{participant_email}>"
+      First Participant<tab>first@example.com
+      Another Participant<tab>another@example.com
+      ...
+
+    For example:
+
+      #{__FILE__} "rails-girls-sofia-8" "Rails Girls Sofia 8.0" "12-13 May 2017" "Sofia, Bulgaria" ./participants.tsv ~/projects/railsgirls/railsgirls/certificates/sofia/may-2017
+  USAGE
   exit 1
 end
+
+event_slug, event_name, event_date, event_location, participants_file, certificates_target_path = ARGV
+
+participants =
+  File.read(participants_file)
+    .strip
+    .lines
+    .map(&:strip)
+    .reject { |line| line == '' }
+    .map { |line| line.split("\t") }
+
+puts "Generating certificates for #{participants.size} participant(s)..."
+participants.each do |participant_name, participant_email|
+  participant_name = Transliterate.from_cyrillic(participant_name.strip)
+  participant_email = participant_email.strip.downcase
+
+  result = Certificate.generate_for(
+    participant_name: participant_name,
+    participant_email: participant_email,
+    certificate_slug: "#{event_slug}-certificate-#{Digest::MD5.hexdigest(participant_email)}",
+    event_name: event_name,
+    event_date: event_date,
+    event_location: event_location,
+    target_path: certificates_target_path,
+  )
+
+  if result
+    puts "Generated cert for #{participant_name} <#{participant_email}> at #{result}"
+  else
+    STDERR.puts "FAILED to generate cert for #{participant_name} <#{participant_email}>"
+    exit 2
+  end
+end
+
+puts "Done, generated #{participants.size} certificate(s) in #{certificates_target_path}."
