@@ -11,3 +11,9 @@ can just run:
 ```shell
 brew cask install mactex
 ```
+
+Ruby 2.3 or newer must also be installed and in `$PATH`.
+
+## Usage
+
+Run `bin/generate-certificates` to see the help and usage screen.
